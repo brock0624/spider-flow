@@ -17,6 +17,18 @@
 			<groupId>org.spiderflow</groupId>
 			<artifactId>spider-flow-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.spiderflow</groupId>
+			<artifactId>spider-flow-mailbox</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.spiderflow</groupId>
+			<artifactId>spider-flow-selenium</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.spiderflow</groupId>
+			<artifactId>spider-flow-ocr</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
