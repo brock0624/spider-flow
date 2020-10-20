@@ -28,7 +28,7 @@ if [[ $DB_PASSWORD ]]; then
 else
   DB_PASSWORD="test123"
 fi
-ADAPTER_OPTS="--spring.datasource.url=jdbc:mysql://${DB_HOST}:3306/${DB_DATABASE}?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT --spring.datasource.username=${DB_USERNAME} --spring.datasource.password=${DB_PASSWORD}"
+ADAPTER_OPTS="--spring.datasource.url=jdbc:mysql://${DB_HOST}:3306/${DB_DATABASE}?useSSL=false&useUnicode=true&characterEncoding=UTF8&autoReconnect=true --spring.datasource.username=${DB_USERNAME} --spring.datasource.password=${DB_PASSWORD}"
 
 if [[ $LOG_PATH ]]; then
 	ADAPTER_OPTS=" $ADAPTER_OPTS --log.path=$LOG_PATH"

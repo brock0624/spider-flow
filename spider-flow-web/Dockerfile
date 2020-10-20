@@ -4,7 +4,7 @@ ENV INSTALL_DIR /opt/work
 
 RUN mkdir -p ${INSTALL_DIR}
 ADD entrypoint.sh ${INSTALL_DIR}/entrypoint.sh
-ADD target/*.jar ${INSTALL_DIR}/app.jar
+ADD target/spider-flow.jar ${INSTALL_DIR}/app.jar
 EXPOSE 8080
 
 WORKDIR ${INSTALL_DIR}
