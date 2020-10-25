@@ -18,6 +18,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spider-flow.version>${project.version}</spider-flow.version>
+		<mysql.version>8.0.21</mysql.version>
 		<alibaba.fastjson.version>1.2.58</alibaba.fastjson.version>
 		<alibaba.druid.version>1.1.16</alibaba.druid.version>
 		<alibaba.transmittable.version>2.11.5</alibaba.transmittable.version>
@@ -61,6 +62,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql.version}</version>
 		</dependency>
 		<!-- alibaba相关包 -->
 		<dependency>
@@ -154,6 +156,11 @@
 				<artifactId>spider-flow-mailbox</artifactId>
 				<version>${spider-flow.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.spiderflow</groupId>
+				<artifactId>spider-flow-wechat</artifactId>
+				<version>${spider-flow.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<modules>
@@ -165,5 +172,6 @@
 		<module>spider-flow-redis</module>
 		<module>spider-flow-ocr</module>
 		<module>spider-flow-mailbox</module>
+		<module>spider-flow-wechat</module>
 	</modules>
 </project>
