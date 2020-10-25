@@ -25,10 +25,14 @@
 			<groupId>org.spiderflow</groupId>
 			<artifactId>spider-flow-redis</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.spiderflow</groupId>-->
-<!--			<artifactId>spider-flow-selenium</artifactId>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>org.spiderflow</groupId>
+			<artifactId>spider-flow-wechat</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.spiderflow</groupId>
+			<artifactId>spider-flow-selenium</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

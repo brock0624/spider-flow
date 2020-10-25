@@ -1,0 +1,66 @@
+<div class="layui-tab layui-tab-fixed layui-tab-brief">
+    <ul class="layui-tab-title">
+        <li class="layui-this">基本配置</li>
+    </ul>
+    <div class="layui-tab-content editor-form-node">
+        <div class="layui-tab-item layui-show">
+            <form class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">节点名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="value" placeholder="请输入节点名称" value="{{=d.value}}" autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数据源</label>
+                    <div class="layui-input-block">
+                        <select name="datasourceId"></select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">收信人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="wechatsckey" placeholder="使用Server酱服务，填写SCKEY，如果多个收信人使用','隔开"
+                               autocomplete="off" class="layui-input input-default"
+                               value="{{=d.data.object.wechatSckey}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">消息标题</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="wechatsubject" placeholder="消息标题，最长为256，必填"
+                               autocomplete="off" class="layui-input input-default"
+                               value="{{=d.data.object.wechatSubject}}">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">消息内容</label>
+                    <div class="layui-input-block" style="height:200px;" placeholder="消息内容，最长64Kb，可空，支持MarkDown"
+                         codemirror="wechatcontext" data-value="{{=d.data.object.wechatContext}}"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $.ajax({
+        url : 'wechat/list',
+        data : {
+            limit : 9999
+        },
+        success : function(data){
+            var wechats = data.records;
+            for(var i=0,len = wechats.length;i<len;i++){
+                var wechat = wechats[i];
+                $('select[name=datasourceId]').append('<option value="'+wechat.id+'">'+wechat.name+'</option>');
+            }
+            layui.form.render();
+            var selectWechatId = '{{=d.data.object.datasourceId}}';
+            if(selectWechatId != ''){
+                $('.layui-form-select dd[lay-value='+selectWechatId+']').trigger('click');
+            }
+        }
+    });
+</script>
