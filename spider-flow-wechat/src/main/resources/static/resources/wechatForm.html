@@ -40,7 +40,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">测试用户</label>
         <div class="layui-input-block">
-            <input type="text" name="wechat" autocomplete="off" class="layui-input input-default" >
+            <input type="text" name="wechatsckey" autocomplete="off" class="layui-input input-default" placeholder="同一个用户，五分钟内仅能收到一次">
         </div>
     </div>
     <div class="btns-submit">
@@ -72,7 +72,7 @@
             type : 'post',
             data : {
                 url : $("input[name=url]").val(),
-                wechat : $("input[name=wechat]").val(),
+                wechatsckey : $("input[name=wechatsckey]").val(),
                 timeout : $("input[name=timeout]").val()
             },
             success : function(json){
@@ -97,7 +97,7 @@
                 id : id,
                 name : $("input[name=name]").val(),
                 url : $("input[name=url]").val(),
-                wechat : $("input[name=wechat]").val(),
+                wechatsckey : $("input[name=wechatsckey]").val(),
                 timeout : $("input[name=timeout]").val()
             },
             success : function(json){

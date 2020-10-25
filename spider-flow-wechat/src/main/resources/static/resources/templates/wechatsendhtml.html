@@ -23,7 +23,7 @@
                     <div class="layui-input-block">
                         <input type="text" name="wechatsckey" placeholder="使用Server酱服务，填写SCKEY，如果多个收信人使用','隔开"
                                autocomplete="off" class="layui-input input-default"
-                               value="{{=d.data.object.wechatSckey}}">
+                               value="{{=d.data.object.wechatsckey}}">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -31,13 +31,13 @@
                     <div class="layui-input-block">
                         <input type="text" name="wechatsubject" placeholder="消息标题，最长为256，必填"
                                autocomplete="off" class="layui-input input-default"
-                               value="{{=d.data.object.wechatSubject}}">
+                               value="{{=d.data.object.wechatsubject}}">
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">消息内容</label>
                     <div class="layui-input-block" style="height:200px;" placeholder="消息内容，最长64Kb，可空，支持MarkDown"
-                         codemirror="wechatcontext" data-value="{{=d.data.object.wechatContext}}"></div>
+                         codemirror="wechatcontext" data-value="{{=d.data.object.wechatcontext}}"></div>
                 </div>
             </form>
         </div>

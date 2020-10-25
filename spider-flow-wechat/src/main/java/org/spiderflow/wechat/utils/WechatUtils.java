@@ -1,7 +1,11 @@
 package org.spiderflow.wechat.utils;
 
+
+import com.alibaba.fastjson.JSONObject;
 import okhttp3.*;
 import org.spiderflow.wechat.model.Wechat;
+
+import java.io.IOException;
 
 /**
  * Author: Brock-Tiyi
@@ -11,19 +15,19 @@ import org.spiderflow.wechat.model.Wechat;
  * Knowledge has no limit
  */
 public class WechatUtils {
-    public static String createWechatSender(Wechat wechat) {
+    public static JSONObject createWechatSender(Wechat wechat, String wechatsckey, String wechatsubject, String wechatcontext) throws IOException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody body = RequestBody.create(mediaType, "text=消息标题，最长为256&desp=消息内容，最长64Kb，可空，支持MarkDown");
+        String url = wechat.getUrl() + wechatsckey + ".send";
+        String content = "text=" + wechatsubject + "&desp=" + wechatcontext;
+        RequestBody body = RequestBody.create(mediaType, content);
         Request request = new Request.Builder()
-                .url("https://sc.ftqq.com/SCU74937T6ba586802a797ab3068e1af8f15b13a55e0c81b84ac34.send")
+                .url(url)
                 .method("POST", body)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
-                .addHeader("Cookie", "PHPSESSID=4a62f137d2cd4b6be12c81f991c323b0")
                 .build();
-//        Response response = client.newCall(request).execute();
-
-        return "";
+        Response response = client.newCall(request).execute();
+        return JSONObject.parseObject(response.body().string());
     }
 }

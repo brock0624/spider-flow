@@ -1,5 +1,6 @@
 package org.spiderflow.wechat.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.spiderflow.common.CURDController;
 import org.spiderflow.executor.PluginConfig;
 import org.spiderflow.model.JsonBean;
@@ -23,13 +24,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class WechatController extends CURDController<WechatService, WechatMapper, Wechat> implements PluginConfig {
 
     @RequestMapping("/test")
-    public JsonBean<String> test(Wechat wechat, String sckey){
+    public JsonBean<String> test(Wechat wechat, String wechatsckey) {
         try {
-            String res=WechatUtils.createWechatSender(wechat);
+            String wechatsubject = "测试消息标题";
+            String wechatcontext = "测试消息正文";
+            JSONObject response = WechatUtils.createWechatSender(wechat, wechatsckey, wechatsubject, wechatcontext);
+            if (response.getInteger("errno")==0) {
+                return new JsonBean<>(1, "测试成功");
+            }else{
+                return new JsonBean<>(-1, response.toString());
+            }
 
-            return new JsonBean<String>(1, "测试成功");
         } catch (Exception e) {
-            return new JsonBean<String>(-1, e.getMessage());
+            return new JsonBean<>(-1, e.getMessage());
         }
     }
 

@@ -1,15 +1,21 @@
 package org.spiderflow.wechat.executor.shape;
 
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spiderflow.ExpressionEngine;
 import org.spiderflow.context.SpiderContext;
 import org.spiderflow.executor.ShapeExecutor;
 import org.spiderflow.model.Shape;
 import org.spiderflow.model.SpiderNode;
+import org.spiderflow.wechat.service.WechatService;
+import org.spiderflow.wechat.utils.WechatUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -42,6 +48,19 @@ public class WechatExecutor implements ShapeExecutor {
      */
     private static final String WECHAT_CONTEXT = "wechatcontext";
 
+    private String[] wechatSckeys = {};
+
+    @Autowired
+    private ExpressionEngine engine;
+
+    @Autowired
+    private WechatService wechatService;
+
+
+    @Override
+    public String supportShape() {
+        return "wechatsendhtml";
+    }
 
     @Override
     public Shape shape() {
@@ -55,11 +74,6 @@ public class WechatExecutor implements ShapeExecutor {
         // 鼠标移动至图标上显示的名称
         shape.setTitle("微信发送");
         return shape;
-    }
-
-    @Override
-    public String supportShape() {
-        return "wechatsendhtml";
     }
 
     @Override
@@ -77,43 +91,54 @@ public class WechatExecutor implements ShapeExecutor {
         } else if (!StringUtils.isNotBlank(wechatContext)) {
             logger.error("消息内容为空！");
         } else {
-//            JavaMailSenderImpl mailboxTemplate = MailboxUtils.createMailSender(mailService.get(datasourceId + ""));
-//            MimeMessage message = mailboxTemplate.createMimeMessage();
-//            MimeMessageHelper mailMessage;
-//            try {
-//                mailMessage = new MimeMessageHelper(message, true);
-//                mailMessage.setFrom(mailboxTemplate.getUsername());
-//                // 处理收件人变量值
-//                mailboxMail = engine.execute(mailboxMail, variables).toString();
-//                mailMessage.setTo(mailboxMail.split(","));
-//                logger.debug("设置收件人信息成功！");
-//            } catch (NullPointerException e) {
-//                logger.error("收件人为空！");
-//                return;
-//            } catch (MessagingException e1) {
-//                logger.error("收件人格式不正确", e1);
-//                return;
-//            }
-//
-//            try {
-//                // 处理发送内容变量值
-//                mailboxContext = engine.execute(mailboxContext, variables).toString();
-//                mailMessage.setText(mailboxContext, true);
-//                logger.debug("设置发送内容成功！");
-//            } catch (NullPointerException e) {
-//                logger.error("发送内容为空！");
-//                return;
-//            } catch (Exception e) {
-//                logger.error("发送内容数据格式不正确", e);
-//                return;
-//            }
-//            try {
-//                logger.debug("邮箱发送中.......请稍等！");
-//                mailboxTemplate.send(message);
-//                logger.debug("邮箱发送成功！");
-//            } catch (Exception e) {
-//                logger.error("邮箱发送失败:{}", e);
-//            }
+            try {
+                // 处理收信人变量值
+                wechatSckey = engine.execute(wechatSckey, variables).toString();
+                wechatSckeys = wechatSckey.split(",");
+                logger.debug("设置收信人信息成功！");
+            } catch (NullPointerException e) {
+                logger.error("收信人为空！");
+                return;
+            } catch (Exception e1) {
+                logger.error("收信人不正确", e1);
+                return;
+            }
+            try {
+                // 处理消息标题变量值
+                wechatSubject = engine.execute(wechatSubject, variables).toString();
+                logger.debug("设置消息标题成功！");
+            } catch (NullPointerException e) {
+                logger.error("消息标题为空！");
+                return;
+            } catch (Exception e) {
+                logger.error("消息标题格式不正确", e);
+                return;
+            }
+            try {
+                // 处理消息内容变量值
+                wechatContext = engine.execute(wechatContext, variables).toString();
+                logger.debug("设置消息内容成功！");
+            } catch (Exception e) {
+                logger.error("消息内容格式不正确", e);
+                return;
+            }
+            try {
+                logger.info("微信发送中.......请稍等！");
+                Collection wechatSckeysList = java.util.Arrays.asList(wechatSckeys);
+                for (Object sckey : wechatSckeysList) {
+                    JSONObject response = WechatUtils.createWechatSender(wechatService.get(datasourceId + ""), sckey.toString(), wechatSubject, wechatContext);
+
+                    if (response.getInteger("errno") == 0) {
+                        logger.debug(sckey + "发送成功！");
+                    } else {
+                        logger.error(sckey + "发送失败！失败原因:" + response.toString());
+                    }
+                }
+
+                logger.debug("微信全部发送结束！");
+            } catch (Exception e) {
+                logger.error("微信发送失败:{}", e);
+            }
         }
     }
 }
