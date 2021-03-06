@@ -53,6 +53,8 @@ public class ScriptService {
             command = "python ";
         }else if(filename.endsWith(".js")){
             command = "node ";
+        }else if(filename.endsWith(".sh")){
+            command = "sh ";
         }else{
             return new ScriptResponse(-2,null,null,null);
         }
