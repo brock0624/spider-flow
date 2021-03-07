@@ -86,4 +86,80 @@ public class SpiderJobManager {
 		}
 	}
 
+	/**
+	 * 启动调度器
+	 *
+	 * @return
+	 */
+	public boolean startScheduler() {
+		boolean result = true;
+		try {
+			scheduler.start();
+		} catch (SchedulerException e) {
+			logger.info("启动调度器异常：{}", e.getMessage());
+			result = false;
+		}
+		return result;
+	}
+	/**
+	 * 关闭调度器
+	 *
+	 * @return
+	 */
+	public boolean standbyScheduler() {
+		boolean result = true;
+		try {
+			if (!scheduler.isShutdown()) {
+				scheduler.standby();
+			}
+		} catch (SchedulerException e) {
+			logger.info("关闭调度器异常：{}", e.getMessage());
+			result = false;
+		}
+		return result;
+	}
+	/**
+	 * 判断调度器是否为开启状态
+	 *
+	 * @return
+	 */
+	public boolean isStarted() {
+		boolean result = true;
+		try {
+			result = scheduler.isStarted();
+		} catch (SchedulerException e) {
+			logger.info("判断调度器是否为开启状态异常：{}", e.getMessage());
+		}
+		return result;
+	}
+
+	/**
+	 * 判断调度器是否为关闭状态
+	 *
+	 * @return
+	 */
+	public boolean isShutdown() {
+		boolean result = true;
+		try {
+			result = scheduler.isShutdown();
+		} catch (SchedulerException e) {
+			logger.info("判断调度器是否为关闭状态异常：{}", e.getMessage());
+		}
+		return result;
+	}
+
+	/**
+	 * 判断调度器是否为待机状态
+	 *
+	 * @return
+	 */
+	public boolean isInStandbyMode() {
+		boolean result = true;
+		try {
+			result = scheduler.isInStandbyMode();
+		} catch (SchedulerException e) {
+			logger.info("判断调度器是否为待机状态异常：{}", e.getMessage());
+		}
+		return result;
+	}
 }
