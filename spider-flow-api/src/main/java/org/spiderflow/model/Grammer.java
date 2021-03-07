@@ -1,14 +1,14 @@
 package org.spiderflow.model;
 
+import org.spiderflow.annotation.Comment;
+import org.spiderflow.annotation.Example;
+import org.spiderflow.annotation.Return;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.spiderflow.annotation.Comment;
-import org.spiderflow.annotation.Example;
-import org.spiderflow.annotation.Return;
 
 public class Grammer {
 	
