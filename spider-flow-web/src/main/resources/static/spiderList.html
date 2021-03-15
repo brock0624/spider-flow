@@ -17,6 +17,11 @@
 		<a class="layui-btn layui-btn-sm layui-btn-normal btn-search"><i class="layui-icon">&#xe615;</i> 搜索</a>
 		<a class="layui-btn layui-btn-sm layui-btn-normal" href="editor.html"><i class="layui-icon">&#xe654;</i> 添加爬虫</a>
 	</div>
+	<div class="layui-input-inline" style="margin-top:5px">
+		<i class="layui-icon mr5">&#xe66f;</i>任务调度 (定时器状态: <label id="schedulerStatus"></label>)
+		<button class="layui-btn layui-btn-xs layui-btn-normal layui-hide" data-type="startScheduler">启动定时器</button>
+		<button class="layui-btn layui-btn-xs layui-btn-danger layui-hide" data-type="standbyScheduler">定时器待机</button>
+	</div>
 </div>
 
 <hr>
@@ -194,7 +199,67 @@
 			maxmin: true,
 			content: 'spiderList-notice.html?id=' + id
 		});
+	}).on('click','.layui-btn-xs', function(){
+		var type = $(this).data('type');
+		active[type] ? active[type].call(this) : '';
 	})
+
+// 获取定时器状态
+$(function(){getSchedulerStatus();});
+function getSchedulerStatus() {
+		$.ajax({
+			url : "job/isInStandbyMode",
+			data : {},
+			type : "post",
+			dataType : "json",
+			error : function(data) {
+				errorHandle(data);
+			},
+			success : function(data) {
+				if (data.code == 0) { // 启动状态
+					$("button[data-type='startScheduler']").addClass("layui-hide");
+					$("button[data-type='standbyScheduler']").removeClass("layui-hide");
+					$("#schedulerStatus").html("<span class='text-green'>启动中</span>");
+				} else { // 待机状态
+					$("button[data-type='startScheduler']").removeClass("layui-hide");
+					$("button[data-type='standbyScheduler']").addClass("layui-hide");
+					$("#schedulerStatus").html("<span class='text-orange'>待机中</span>");
+				}
+			}
+		});
+	}
+	active = {
+		startScheduler: function() {
+			$.ajax({
+				url : "job/startScheduler",
+				data : {},
+				type : "post",
+				dataType : "json",
+				error : function(data) {
+					errorHandle(data);
+				},
+				success : function(data) {
+					getSchedulerStatus();
+					alert(data.message);
+				}
+			});
+		},
+		standbyScheduler: function() {
+			$.ajax({
+				url : "job/standbyScheduler",
+				data : {},
+				type : "post",
+				dataType : "json",
+				error : function(data) {
+					errorHandle(data);
+				},
+				success : function(data) {
+					getSchedulerStatus();
+					alert(data.message);
+				}
+			});
+		}
+	};
 </script>
 <script type="text/html" id="execute-count">
 	<a class="layui-btn layui-btn-sm btn-task" data-name="{{d.name}}" data-id="{{d.id}}">{{d.running || 0}}/{{d.executeCount || 0}}</a>

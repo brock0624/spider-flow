@@ -35,13 +35,13 @@ import java.util.stream.Collectors;
  */
 @Service
 public class SpiderFlowService extends ServiceImpl<SpiderFlowMapper, SpiderFlow> {
-	
+
 	@Autowired
 	private SpiderFlowMapper sfMapper;
-	
+
 	@Autowired
 	private SpiderJobManager spiderJobManager;
-	
+
 	@Autowired
 	private FlowNoticeMapper flowNoticeMapper;
 
@@ -73,15 +73,15 @@ public class SpiderFlowService extends ServiceImpl<SpiderFlowMapper, SpiderFlow>
 	public IPage<SpiderFlow> selectSpiderPage(Page<SpiderFlow> page, String name){
 		return sfMapper.selectSpiderPage(page,name);
 	}
-	
+
 	public int executeCountIncrement(String id, Date lastExecuteTime, Date nextExecuteTime){
 		if(nextExecuteTime == null){
 			return sfMapper.executeCountIncrement(id, lastExecuteTime);
 		}
 		return sfMapper.executeCountIncrementAndExecuteTime(id, lastExecuteTime, nextExecuteTime);
-		
+
 	}
-	
+
 	/**
 	 * 重置定时任务
 	 * @param id 爬虫的ID
@@ -130,13 +130,13 @@ public class SpiderFlowService extends ServiceImpl<SpiderFlowMapper, SpiderFlow>
 		}
 		return true;
 	}
-	
+
 	public void stop(String id){
 		sfMapper.resetSpiderStatus(id,"0");
 		sfMapper.resetNextExecuteTime(id);
 		spiderJobManager.remove(id);
 	}
-	
+
 	public void start(String id){
 		spiderJobManager.remove(id);
 		sfMapper.resetSpiderStatus(id, "1");
@@ -147,11 +147,11 @@ public class SpiderFlowService extends ServiceImpl<SpiderFlowMapper, SpiderFlow>
 			sfMapper.updateById(spiderFlow);
 		}
 	}
-	
+
 	public void run(String id){
 		spiderJobManager.run(id);
 	}
-	
+
 	public void resetExecuteCount(String id){
 		sfMapper.resetExecuteCount(id);
 	}
@@ -160,11 +160,11 @@ public class SpiderFlowService extends ServiceImpl<SpiderFlowMapper, SpiderFlow>
 		spiderJobManager.remove(id);
 		flowNoticeMapper.deleteById(id);
 	}
-	
+
 	public List<SpiderFlow> selectOtherFlows(String id){
 		return sfMapper.selectOtherFlows(id);
 	}
-	
+
 	public List<SpiderFlow> selectFlows(){
 		return sfMapper.selectFlows();
 	}
@@ -219,5 +219,26 @@ public class SpiderFlowService extends ServiceImpl<SpiderFlowMapper, SpiderFlow>
 
 	public Integer getFlowMaxTaskId(String flowId){
 		return sfMapper.getFlowMaxTaskId(flowId);
+	}
+
+	public boolean isInStandbyMode(){
+		return spiderJobManager.isInStandbyMode();
+	}
+
+	public boolean startScheduler(){
+		return spiderJobManager.startScheduler();
+	}
+
+	public boolean standbyScheduler(){
+		return spiderJobManager.standbyScheduler();
+	}
+
+
+	public boolean isStarted(){
+		return spiderJobManager.isStarted();
+	}
+
+	public boolean isShutdown(){
+		return spiderJobManager.isShutdown();
 	}
 }

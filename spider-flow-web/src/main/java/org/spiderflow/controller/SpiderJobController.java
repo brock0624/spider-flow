@@ -2,7 +2,7 @@ package org.spiderflow.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spiderflow.core.job.SpiderJobManager;
+import org.spiderflow.core.service.SpiderFlowService;
 import org.spiderflow.model.JsonBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,7 @@ public class SpiderJobController {
     private static Logger logger = LoggerFactory.getLogger(SpiderJobController.class);
 
     @Autowired
-    private SpiderJobManager spiderJobManager;
+    private SpiderFlowService spiderFlowService;
 
     /**
      * 判断定时器是否为待机模式
@@ -30,11 +30,11 @@ public class SpiderJobController {
     @RequestMapping(value = "/isInStandbyMode")
     @ResponseBody
     public JsonBean<Void> isInStandbyMode() {
-        boolean result = spiderJobManager.isInStandbyMode();
+        boolean result = spiderFlowService.isInStandbyMode();
         if(result){
-            return new JsonBean<>(1,"true");
+            return new JsonBean<>(1,"定时器待机中");
         }
-        return new JsonBean<>(0,"false");
+        return new JsonBean<>(0,"定时器启动中");
     }
 
 
@@ -46,11 +46,11 @@ public class SpiderJobController {
     @RequestMapping(value = "startScheduler")
     @ResponseBody
     public JsonBean<Void> startScheduler() {
-        boolean result = spiderJobManager.startScheduler();
+        boolean result = spiderFlowService.startScheduler();
         if(result){
-            return new JsonBean<>(1,"true");
+            return new JsonBean<>(1,"启动定时器成功");
         }
-        return new JsonBean<>(0,"false");
+        return new JsonBean<>(0,"启动定时器失败");
     }
 
     /**
@@ -61,11 +61,11 @@ public class SpiderJobController {
     @RequestMapping(value = "standbyScheduler")
     @ResponseBody
     public JsonBean<Void> standbyScheduler() {
-        boolean result = spiderJobManager.standbyScheduler();
+        boolean result = spiderFlowService.standbyScheduler();
         if(result){
-            return new JsonBean<>(1,"true");
+            return new JsonBean<>(1,"待机定时器成功");
         }
-        return new JsonBean<>(0,"false");
+        return new JsonBean<>(0,"待机定时器失败");
     }
 
     /**
@@ -76,11 +76,11 @@ public class SpiderJobController {
     @RequestMapping(value = "isStarted")
     @ResponseBody
     public JsonBean<Void> isStarted() {
-        boolean result = spiderJobManager.isStarted();
+        boolean result = spiderFlowService.isStarted();
         if(result){
-            return new JsonBean<>(1,"true");
+            return new JsonBean<>(1,"定时器启动中");
         }
-        return new JsonBean<>(0,"false");
+        return new JsonBean<>(0,"定时器待机中");
     }
 
     /**
@@ -91,11 +91,11 @@ public class SpiderJobController {
     @RequestMapping(value = "isShutdown")
     @ResponseBody
     public JsonBean<Void> isShutdown() {
-        boolean result = spiderJobManager.isShutdown();
+        boolean result = spiderFlowService.isShutdown();
         if(result){
-            return new JsonBean<>(1,"true");
+            return new JsonBean<>(1,"定时器未开启");
         }
-        return new JsonBean<>(0,"false");
+        return new JsonBean<>(0,"定时器启动中");
     }
 
 
